@@ -1,6 +1,8 @@
 ﻿using Mecha2_API_core.Data;
 using Mecha2_API_core.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,39 +20,78 @@ namespace Mecha2_API_core.Controllers
 
         public IssuesController(ApiDbContext dbContext)
         {
-            dbContext = _dbContext;
+            _dbContext = dbContext;
         }
 
         // GET: api/<IssuesController>
         [HttpGet]
-        public IEnumerable<Issue> Get()
+        public async Task<IActionResult> Get()
         {
-            return _dbContext.Issues;
+            return Ok(await _dbContext.Issues.ToListAsync());
         }
 
         // GET api/<IssuesController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var issue = await _dbContext.Issues.FindAsync(id);
+            if (issue == null)
+            {
+                return NotFound("Select Failed: No record found for this issue");
+            }
+            else
+            {
+                return Ok(issue);
+            }
+                
         }
 
         // POST api/<IssuesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] Issue issue)
         {
+            await _dbContext.Issues.AddAsync(issue);
+            await _dbContext.SaveChangesAsync();
+            return StatusCode(StatusCodes.Status201Created);
         }
 
         // PUT api/<IssuesController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] Issue issueObj)
         {
+            var issue = await _dbContext.Issues.FindAsync(id);
+            if(issue == null)
+            {
+                return NotFound("Update Failed : No record found for this issue");
+            }
+            else
+            {
+                issue.IssueDate = issueObj.IssueDate;
+                issue.LotNo = issueObj.LotNo;
+                issue.EmployeeNo = issueObj.EmployeeNo;
+                issue.Quantity = issueObj.Quantity;
+                await _dbContext.SaveChangesAsync();
+                return Ok("Record Updated Successfully");
+            }
+            
         }
 
         // DELETE api/<IssuesController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            var issue = await _dbContext.Issues.FindAsync(id);
+            if (issue == null)
+            {
+                return NotFound("Delete Failed : No record found for this issue");
+            }
+            else
+            {
+                _dbContext.Issues.Remove(issue);
+                await _dbContext.SaveChangesAsync();
+                return Ok("Record Deleted Successfully");
+            }
+                
         }
     }
 }

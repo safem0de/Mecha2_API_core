@@ -1,6 +1,8 @@
 ﻿using Mecha2_API_core.Data;
 using Mecha2_API_core.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,27 +31,58 @@ namespace Mecha2_API_core.Controllers
 
         // GET api/<IssueDetailsController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            return Ok(await _dbContext.IssueDetails.ToListAsync());
         }
 
         // POST api/<IssueDetailsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] IssueDetail issuedetail)
         {
+            await _dbContext.IssueDetails.AddAsync(issuedetail);
+            await _dbContext.SaveChangesAsync();
+            return StatusCode(StatusCodes.Status201Created);
         }
 
         // PUT api/<IssueDetailsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] IssueDetail issueDetailObj)
         {
+            var issuedetail = await _dbContext.IssueDetails.FindAsync(id);
+            if (issuedetail == null)
+            {
+                return NotFound("Update Failed : No record found for this issuedetail");
+            }
+            else
+            {
+                issuedetail.SAPNo = issueDetailObj.SAPNo;
+                issuedetail.ItemNo = issueDetailObj.ItemNo;
+                issuedetail.WOSNo = issueDetailObj.WOSNo;
+                issuedetail.DrawingNo = issueDetailObj.DrawingNo;
+                issuedetail.LotNo = issueDetailObj.LotNo;
+                issuedetail.Quantity = issueDetailObj.Quantity;
+                issuedetail.IssueId = issueDetailObj.IssueId;
+                return Ok("Record Updated Successfully");
+            }
+            
         }
 
         // DELETE api/<IssueDetailsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            var issuedetail = await _dbContext.IssueDetails.FindAsync(id);
+            if (issuedetail == null)
+            {
+                return NotFound("Delete Failed : No record found for this issuedetail");
+            }
+            else
+            {
+                _dbContext.IssueDetails.Remove(issuedetail);
+                await _dbContext.SaveChangesAsync();
+                return Ok("Record Deleted Successfully");
+            }
         }
     }
 }
