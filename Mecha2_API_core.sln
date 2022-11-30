@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.33027.164
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mecha2_API_core", "Mecha2_API_core\Mecha2_API_core.csproj", "{F211BA17-885D-4F48-A9CB-91C403EC7B47}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F211BA17-885D-4F48-A9CB-91C403EC7B47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F211BA17-885D-4F48-A9CB-91C403EC7B47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F211BA17-885D-4F48-A9CB-91C403EC7B47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F211BA17-885D-4F48-A9CB-91C403EC7B47}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {913D2199-D7DC-4F05-B841-9CC45E3876A7}
+	EndGlobalSection
+EndGlobal
